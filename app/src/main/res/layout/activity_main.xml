@@ -6,13 +6,33 @@
     android:layout_height="match_parent"
     tools:context=".presentation.MainActivity">
 
+    <TextView
+        android:id="@+id/divider1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/SectionDivider"
+        android:text="@string/company"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <FrameLayout
         android:id="@+id/container1"
         android:layout_width="match_parent"
         android:layout_height="100dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/divider1" />
+
+    <TextView
+        android:id="@+id/divider2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/launches"
+        style="@style/SectionDivider"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/container1" />
 
     <FrameLayout
         android:id="@+id/container2"
@@ -21,7 +41,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/container1" />
+        app:layout_constraintTop_toBottomOf="@+id/divider2" />
 </androidx.constraintlayout.widget.ConstraintLayout>
 
 

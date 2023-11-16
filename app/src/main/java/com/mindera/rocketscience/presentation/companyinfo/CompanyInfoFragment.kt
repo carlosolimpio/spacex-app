@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import com.mindera.rocketscience.R
 import com.mindera.rocketscience.databinding.FragmentCompanyInfoBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
@@ -40,7 +41,15 @@ class CompanyInfoFragment : Fragment() {
             companyViewModel.state.collect { response ->
                 when (response) {
                     is CompanyState.Success -> {
-                        Log.d("OLIMPIO", "initObservers: CompanyInfoFragment: ${response.data}")
+                        binding.companySumaryText.text = getString(
+                            R.string.company_summary,
+                            response.data.name,
+                            response.data.founder,
+                            response.data.yearFounded,
+                            response.data.employees,
+                            response.data.launchSites,
+                            response.data.valuation
+                        )
                     }
                     is CompanyState.Error -> {
                         Log.d("OLIMPIO", "initObservers: CompanyInfoFragment: $response")

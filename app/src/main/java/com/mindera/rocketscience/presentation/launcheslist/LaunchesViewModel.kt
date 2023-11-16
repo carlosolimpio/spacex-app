@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mindera.rocketscience.domain.common.DataResponse
 import com.mindera.rocketscience.domain.launcheslist.Launch
-import com.mindera.rocketscience.domain.launcheslist.LaunchUseCase
+import com.mindera.rocketscience.domain.launcheslist.LaunchesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -13,7 +13,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LaunchesViewModel @Inject constructor(
-    private val launchesUseCase: LaunchUseCase
+    private val launchesUseCase: LaunchesUseCase
 ) : ViewModel() {
 
     private val _state = MutableStateFlow<LaunchesState<List<Launch>>>(LaunchesState.Loading)

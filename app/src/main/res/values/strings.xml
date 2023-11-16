@@ -1,5 +1,14 @@
 <resources>
-    <string name="app_name">My Application</string>
+    <string name="app_name">SpaceX</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="company">COMPANY</string>
+    <string name="launches">LAUNCHES</string>
+    <string name="company_summary">%1$s was founded by %2$s in %3$d. It has now %4$d employees, %5$d launch sites, and is valued at USD %6$d.</string>
+    <string name="mission">Mission:</string>
+    <string name="date_time">Date/Time:</string>
+    <string name="rocket">Rocket:</string>
+    <string name="days_now">Days %1$s now:</string>
+    <string name="rocket_info">%d1$s / %d2$s</string>
 </resources>

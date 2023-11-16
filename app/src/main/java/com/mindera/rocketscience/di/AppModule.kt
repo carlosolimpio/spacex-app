@@ -11,7 +11,7 @@ import com.mindera.rocketscience.data.launcheslist.local.LaunchesDao
 import com.mindera.rocketscience.data.launcheslist.remote.LaunchesService
 import com.mindera.rocketscience.domain.companyinfo.CompanyRepository
 import com.mindera.rocketscience.domain.companyinfo.CompanyUseCase
-import com.mindera.rocketscience.domain.launcheslist.LaunchUseCase
+import com.mindera.rocketscience.domain.launcheslist.LaunchesUseCase
 import com.mindera.rocketscience.domain.launcheslist.LaunchesRepository
 import dagger.Module
 import dagger.Provides
@@ -106,7 +106,7 @@ object AppModule {
     @Provides
     fun provideLaunchUseCase(
         repository: LaunchesRepository
-    ): LaunchUseCase {
-        return LaunchUseCase(repository)
+    ): LaunchesUseCase {
+        return LaunchesUseCase(repository)
     }
 }
