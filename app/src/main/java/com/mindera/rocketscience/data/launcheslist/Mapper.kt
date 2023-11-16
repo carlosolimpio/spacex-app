@@ -3,7 +3,6 @@ package com.mindera.rocketscience.data.launcheslist
 import com.mindera.rocketscience.data.launcheslist.local.entities.LaunchEntity
 import com.mindera.rocketscience.data.launcheslist.remote.dto.LaunchDto
 import com.mindera.rocketscience.domain.launcheslist.Launch
-
 fun LaunchDto.toLaunchEntity() = LaunchEntity(
     missionName = missionName,
     launchDate = launchDate,

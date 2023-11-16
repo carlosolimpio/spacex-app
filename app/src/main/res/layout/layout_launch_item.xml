@@ -10,6 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="3dp"
+        android:clickable="true"
         app:cardCornerRadius="6dp"
         app:cardElevation="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -40,13 +41,16 @@
                 app:layout_constraintTop_toTopOf="@+id/patchImage" />
 
             <TextView
-                android:id="@+id/missionValue"
-                android:layout_width="wrap_content"
+                android:id="@+id/missionName"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:maxLines="2"
+                android:singleLine="false"
                 app:layout_constraintBottom_toBottomOf="@+id/mission"
+                app:layout_constraintEnd_toStartOf="@+id/launchSuccessIcon"
                 app:layout_constraintStart_toStartOf="@+id/dateTimeValue"
                 app:layout_constraintTop_toTopOf="@+id/mission"
-                tools:text="FalconSat" />
+                tools:text="FalconSatFalconSatFalcalconSat" />
 
             <TextView
                 android:id="@+id/dateTime"
@@ -59,10 +63,12 @@
 
             <TextView
                 android:id="@+id/dateTimeValue"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:text="@string/date_at_time"
                 app:layout_constraintBottom_toBottomOf="@+id/dateTime"
-                app:layout_constraintStart_toStartOf="@+id/rocketValue"
+                app:layout_constraintEnd_toStartOf="@+id/launchSuccessIcon"
+                app:layout_constraintStart_toStartOf="@+id/rocketAlias"
                 app:layout_constraintTop_toTopOf="@+id/dateTime"
                 tools:text="2006-03-24T22:30:00.000Z" />
 
@@ -76,11 +82,12 @@
                 app:layout_constraintTop_toBottomOf="@+id/dateTime" />
 
             <TextView
-                android:id="@+id/rocketValue"
-                android:layout_width="wrap_content"
+                android:id="@+id/rocketAlias"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@string/rocket_info"
                 app:layout_constraintBottom_toBottomOf="@+id/rocket"
+                app:layout_constraintEnd_toStartOf="@+id/launchSuccessIcon"
                 app:layout_constraintStart_toStartOf="@+id/daysLaunchValue"
                 app:layout_constraintTop_toTopOf="@+id/rocket"
                 tools:text="Falcon 1 / Merlin A" />

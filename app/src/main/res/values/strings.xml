@@ -10,5 +10,6 @@
     <string name="date_time">Date/Time:</string>
     <string name="rocket">Rocket:</string>
     <string name="days_now">Days %1$s now:</string>
-    <string name="rocket_info">%d1$s / %d2$s</string>
+    <string name="rocket_info">%1$s / %2$s</string>
+    <string name="date_at_time">%1$s at %2$s</string>
 </resources>
