@@ -2,7 +2,7 @@ package com.mindera.rocketscience.presentation.companyinfo
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mindera.rocketscience.domain.companyinfo.ApiResponse
+import com.mindera.rocketscience.domain.common.DataResponse
 import com.mindera.rocketscience.domain.companyinfo.Company
 import com.mindera.rocketscience.domain.companyinfo.CompanyUseCase
 import com.mindera.rocketscience.presentation.companyinfo.CompanyState.Loading
@@ -24,8 +24,8 @@ class CompanyViewModel @Inject constructor(
         viewModelScope.launch {
             useCase().collect {
                 when (it) {
-                    is ApiResponse.Error -> _state.value = CompanyState.Error(it.message)
-                    is ApiResponse.Success -> _state.value = CompanyState.Success(it.data)
+                    is DataResponse.Error -> _state.value = CompanyState.Error(it.message)
+                    is DataResponse.Success -> _state.value = CompanyState.Success(it.data)
                 }
             }
         }

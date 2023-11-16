@@ -7,10 +7,10 @@ import androidx.room.Query
 import com.mindera.rocketscience.data.companyinfo.local.entities.CompanyEntity
 
 @Dao
-abstract class CompanyDao {
+interface CompanyDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    abstract suspend fun insertCompany(company: CompanyEntity)
+    suspend fun insertCompany(company: CompanyEntity)
 
     @Query("SELECT * FROM company LIMIT 1")
-    abstract suspend fun getCompany(): CompanyEntity?
+    suspend fun getCompany(): CompanyEntity?
 }

@@ -40,13 +40,13 @@ class CompanyInfoFragment : Fragment() {
             companyViewModel.state.collect { response ->
                 when (response) {
                     is CompanyState.Success -> {
-                        Log.d("OLIMPIO", "initObservers: $response")
+                        Log.d("OLIMPIO", "initObservers: CompanyInfoFragment: ${response.data}")
                     }
                     is CompanyState.Error -> {
-                        Log.d("OLIMPIO", "initObservers: $response")
+                        Log.d("OLIMPIO", "initObservers: CompanyInfoFragment: $response")
                     }
                     CompanyState.Loading -> {
-                        Log.d("OLIMPIO", "initObservers: $response")
+                        Log.d("OLIMPIO", "initObservers: CompanyInfoFragment: $response")
                     }
                 }
             }

@@ -1,8 +1,9 @@
 package com.mindera.rocketscience.data.companyinfo
 
+import com.mindera.rocketscience.data.common.utils.handleResponse
 import com.mindera.rocketscience.data.companyinfo.local.CompanyDao
 import com.mindera.rocketscience.data.companyinfo.remote.CompanyService
-import com.mindera.rocketscience.domain.companyinfo.ApiResponse
+import com.mindera.rocketscience.domain.common.DataResponse
 import com.mindera.rocketscience.domain.companyinfo.CompanyRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flow
@@ -18,18 +19,18 @@ class CompanyRepositoryImpl @Inject constructor(
         val company = companyDao.getCompany()
 
         if (company == null) {
-            val response = companyService.getCompanyInfo()
-
-            if (response.isSuccessful) {
-                response.body()?.let {
-                    companyDao.insertCompany(it.toCompanyEntity())
-                    emit(ApiResponse.Success(it.toCompany()))
-                } ?: emit(ApiResponse.Error("Response not successful. Null response"))
-            } else {
-                emit(ApiResponse.Error("Response not successful. Code: ${response.code()}"))
-            }
+            companyService.getCompanyInfo()
+                .handleResponse(
+                    onSuccess = { companyDto ->
+                        companyDao.insertCompany(companyDto.toCompanyEntity())
+                        emit(DataResponse.Success(companyDto.toCompany()))
+                    },
+                    onError = {
+                        emit(DataResponse.Error(it))
+                    }
+                )
         } else {
-            emit(ApiResponse.Success(company.toCompany()))
+            emit(DataResponse.Success(company.toCompany()))
         }
     }.flowOn(Dispatchers.IO)
 }

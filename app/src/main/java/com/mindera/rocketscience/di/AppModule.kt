@@ -2,12 +2,17 @@ package com.mindera.rocketscience.di
 
 import android.content.Context
 import androidx.room.Room
-import com.mindera.rocketscience.data.common.local.AppRoomDatabase
+import com.mindera.rocketscience.data.common.db.AppRoomDatabase
 import com.mindera.rocketscience.data.companyinfo.CompanyRepositoryImpl
 import com.mindera.rocketscience.data.companyinfo.local.CompanyDao
 import com.mindera.rocketscience.data.companyinfo.remote.CompanyService
+import com.mindera.rocketscience.data.launcheslist.LaunchesRepositoryImpl
+import com.mindera.rocketscience.data.launcheslist.local.LaunchesDao
+import com.mindera.rocketscience.data.launcheslist.remote.LaunchesService
 import com.mindera.rocketscience.domain.companyinfo.CompanyRepository
 import com.mindera.rocketscience.domain.companyinfo.CompanyUseCase
+import com.mindera.rocketscience.domain.launcheslist.LaunchUseCase
+import com.mindera.rocketscience.domain.launcheslist.LaunchesRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -39,6 +44,12 @@ object AppModule {
 
     @Singleton
     @Provides
+    fun provideLaunchesService(retrofit: Retrofit): LaunchesService {
+        return retrofit.create(LaunchesService::class.java)
+    }
+
+    @Singleton
+    @Provides
     fun provideAppRoomDataBase(
         @ApplicationContext context: Context,
     ): AppRoomDatabase {
@@ -59,6 +70,14 @@ object AppModule {
 
     @Singleton
     @Provides
+    fun provideLaunchesDao(
+        appDatabase: AppRoomDatabase
+    ): LaunchesDao {
+        return appDatabase.getLaunchesDao()
+    }
+
+    @Singleton
+    @Provides
     fun provideCompanyRepository(
         companyService: CompanyService,
         companyDao: CompanyDao
@@ -68,9 +87,26 @@ object AppModule {
 
     @Singleton
     @Provides
+    fun provideLaunchesRepository(
+        launchesService: LaunchesService,
+        launchesDao: LaunchesDao
+    ): LaunchesRepository {
+        return LaunchesRepositoryImpl(launchesService, launchesDao)
+    }
+
+    @Singleton
+    @Provides
     fun provideCompanyUseCase(
         repository: CompanyRepository
     ): CompanyUseCase {
         return CompanyUseCase(repository)
+    }
+
+    @Singleton
+    @Provides
+    fun provideLaunchUseCase(
+        repository: LaunchesRepository
+    ): LaunchUseCase {
+        return LaunchUseCase(repository)
     }
 }
