@@ -6,6 +6,7 @@ data class LaunchDto(
     @SerializedName("mission_name") val missionName: String,
     @SerializedName("launch_date_utc") val launchDate: String,
     @SerializedName("launch_success") val wasLaunchSuccessful: Boolean,
+    @SerializedName("launch_year") val launchYear: String,
     val rocket: Rocket,
     val links: Links
 )

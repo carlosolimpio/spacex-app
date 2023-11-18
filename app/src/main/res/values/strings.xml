@@ -12,4 +12,12 @@
     <string name="days_now">Days %1$s now:</string>
     <string name="rocket_info">%1$s / %2$s</string>
     <string name="date_at_time">%1$s at %2$s</string>
+    <string name="from">from</string>
+    <string name="since">since</string>
+    <string name="filter">Filter</string>
+    <string name="by_year">By year(s):</string>
+    <string name="by_successful_launches_only">By successful launches only:</string>
+    <string name="sorted_by">Sorted by:</string>
+    <string name="asc">ASC</string>
+    <string name="desc">DESC</string>
 </resources>

@@ -8,6 +8,7 @@ import com.mindera.rocketscience.domain.companyinfo.CompanyRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import java.net.UnknownHostException
 import javax.inject.Inject
 
 class CompanyRepositoryImpl @Inject constructor(
@@ -19,16 +20,22 @@ class CompanyRepositoryImpl @Inject constructor(
         val company = companyDao.getCompany()
 
         if (company == null) {
-            companyService.getCompanyInfo()
-                .handleResponse(
-                    onSuccess = { companyDto ->
-                        companyDao.insertCompany(companyDto.toCompanyEntity())
-                        emit(DataResponse.Success(companyDto.toCompany()))
-                    },
-                    onError = {
-                        emit(DataResponse.Error(it))
-                    }
-                )
+            try {
+                companyService.getCompanyInfo()
+                    .handleResponse(
+                        onSuccess = { companyDto ->
+                            companyDao.insertCompany(companyDto.toCompanyEntity())
+                            emit(DataResponse.Success(companyDto.toCompany()))
+                        },
+                        onError = {
+                            emit(DataResponse.Error(it))
+                        }
+                    )
+            } catch (uh: UnknownHostException) {
+                emit(DataResponse.Error("Device not connected to internet"))
+            } catch (e: Exception) {
+                emit(DataResponse.Error(e.message.toString()))
+            }
         } else {
             emit(DataResponse.Success(company.toCompany()))
         }

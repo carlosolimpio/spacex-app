@@ -18,6 +18,8 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
@@ -29,9 +31,22 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideRetrofitInstance(): Retrofit {
+    fun provideOkHttpClient(): OkHttpClient {
+        val interceptor = HttpLoggingInterceptor().apply {
+            level = HttpLoggingInterceptor.Level.BODY
+        }
+
+        return OkHttpClient.Builder()
+            .addInterceptor(interceptor)
+            .build()
+    }
+
+    @Singleton
+    @Provides
+    fun provideRetrofitInstance(client: OkHttpClient): Retrofit {
         return Retrofit.Builder()
             .baseUrl(SPACEX_DATA_API_URL)
+            .client(client)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }

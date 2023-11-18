@@ -9,6 +9,7 @@ data class LaunchEntity(
     val id: Int = 0,
     val missionName: String,
     val launchDate: String,
+    val launchYear: String,
     val wasLaunchSuccessful: Boolean,
     val rocketName: String,
     val rocketType: String,

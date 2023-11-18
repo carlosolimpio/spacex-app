@@ -33,7 +33,7 @@ class LaunchesAdapter : RecyclerView.Adapter<LaunchesAdapter.LaunchesViewHolder>
         val binding = LayoutLaunchItemBinding.inflate(
             LayoutInflater.from(parent.context),
             parent,
-            false
+            false,
         )
         return LaunchesViewHolder(binding)
     }
@@ -46,7 +46,7 @@ class LaunchesAdapter : RecyclerView.Adapter<LaunchesAdapter.LaunchesViewHolder>
     }
 
     inner class LaunchesViewHolder(
-        private val binding: LayoutLaunchItemBinding
+        private val binding: LayoutLaunchItemBinding,
     ) : RecyclerView.ViewHolder(binding.root) {
         private val context = binding.root.context
 
@@ -56,19 +56,19 @@ class LaunchesAdapter : RecyclerView.Adapter<LaunchesAdapter.LaunchesViewHolder>
                 dateTimeValue.text = context.getString(
                     R.string.date_at_time,
                     launch.launchDate.convertToDate(),
-                    launch.launchDate.convertToTime()
+                    launch.launchDate.convertToTime(),
                 )
                 rocketAlias.text = context.getString(
                     R.string.rocket_info,
                     launch.rocketName,
-                    launch.rocketType
+                    launch.rocketType,
                 )
 
                 val days = launch.launchDate.calculateDaysFromToday()
                 daysLaunch.text = if (days > 0) {
-                    context.getString(R.string.days_now, "from")
+                    context.getString(R.string.days_now, context.getString(R.string.from))
                 } else {
-                    context.getString(R.string.days_now, "since")
+                    context.getString(R.string.days_now, context.getString(R.string.since))
                 }
 
                 daysLaunchValue.text = days.absoluteValue.toString()
@@ -78,7 +78,7 @@ class LaunchesAdapter : RecyclerView.Adapter<LaunchesAdapter.LaunchesViewHolder>
                         R.drawable.icon_done
                     } else {
                         R.drawable.icon_failed
-                    }
+                    },
                 )
 
                 Glide.with(context)
