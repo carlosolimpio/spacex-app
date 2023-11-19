@@ -20,4 +20,10 @@
     <string name="sorted_by">Sorted by:</string>
     <string name="asc">ASC</string>
     <string name="desc">DESC</string>
+    <string name="click_to_open_one_of_the_links_bellow">Click to open one of the links bellow</string>
+    <string name="no_links_found">No links found!</string>
+    <string name="unfortunately_no_links_attached">Unfortunately this mission doesn\'t have links attached :[</string>
+    <string name="close">Close</string>
+    <string name="filter_the_launches_list">Filter the launches list</string>
+    <string name="clear_filters">Clear Filters</string>
 </resources>

@@ -1,4 +1,4 @@
-package com.mindera.rocketscience.presentation.launcheslist.filterdialog
+package com.mindera.rocketscience.presentation.launcheslist.dialogs.filterdialog
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

@@ -1,6 +1,5 @@
 package com.mindera.rocketscience.presentation.launcheslist
 
-import android.app.AlertDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
@@ -8,7 +7,6 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.RadioButton
 import android.widget.Toast
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
@@ -17,10 +15,10 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mindera.rocketscience.R
 import com.mindera.rocketscience.databinding.FragmentLaunchesBinding
-import com.mindera.rocketscience.databinding.LayoutCustomFilterDialogBinding
+import com.mindera.rocketscience.domain.common.UiState
 import com.mindera.rocketscience.domain.launcheslist.Launch
-import com.mindera.rocketscience.presentation.launcheslist.filterdialog.FilterDialog
-import com.mindera.rocketscience.presentation.launcheslist.filterdialog.YearListAdapter
+import com.mindera.rocketscience.presentation.launcheslist.dialogs.filterdialog.FilterDialog
+import com.mindera.rocketscience.presentation.launcheslist.dialogs.linksdialog.LinkChooserDialog
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -35,7 +33,7 @@ class LaunchesFragment : Fragment(), MenuProvider {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?,
+        savedInstanceState: Bundle?
     ): View {
         requireActivity().addMenuProvider(this)
 
@@ -56,7 +54,7 @@ class LaunchesFragment : Fragment(), MenuProvider {
     override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
         return when (menuItem.itemId) {
             R.id.action_filter -> {
-                viewModel.fetchLaunchesYears()
+                viewModel.fetchYears()
                 lifecycleScope.launch {
                     viewModel.yearsState.collect { years ->
                         val dialog = FilterDialog(
@@ -80,7 +78,11 @@ class LaunchesFragment : Fragment(), MenuProvider {
     }
 
     private fun initLaunchesList(launches: List<Launch>) {
-        launchesAdapter = LaunchesAdapter()
+        launchesAdapter = LaunchesAdapter(
+            onMissionClick = {
+                LinkChooserDialog(it).show(childFragmentManager, LinkChooserDialog.TAG)
+            }
+        )
         launchesAdapter.saveData(launches)
 
         with(binding.rvLaunchesList) {
@@ -93,22 +95,15 @@ class LaunchesFragment : Fragment(), MenuProvider {
         lifecycleScope.launch {
             viewModel.state.collect { response ->
                 when (response) {
-                    is LaunchesState.Success -> {
-                        binding.apply {
-                            progressBar.visibility = View.GONE
-                            rvLaunchesList.visibility = View.VISIBLE
-                        }
+                    is UiState.Success -> {
+                        showProgress(false)
                         initLaunchesList(response.data)
                     }
-                    is LaunchesState.Error -> {
-                        binding.progressBar.visibility = View.GONE
+                    is UiState.Error -> {
+                        showProgress(false)
+                        Toast.makeText(context, response.message, Toast.LENGTH_SHORT).show()
                     }
-                    LaunchesState.Loading -> {
-                        binding.apply {
-                            progressBar.visibility = View.VISIBLE
-                            rvLaunchesList.visibility = View.GONE
-                        }
-                    }
+                    UiState.Loading -> { showProgress(true) }
                 }
             }
         }
@@ -116,6 +111,18 @@ class LaunchesFragment : Fragment(), MenuProvider {
         lifecycleScope.launch {
             viewModel.notFoundState.collect {
                 if (it.isNotBlank()) Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+            }
+        }
+    }
+
+    private fun showProgress(isLoading: Boolean) {
+        binding.apply {
+            if (isLoading) {
+                progressBar.visibility = View.VISIBLE
+                rvLaunchesList.visibility = View.GONE
+            } else {
+                progressBar.visibility = View.GONE
+                rvLaunchesList.visibility = View.VISIBLE
             }
         }
     }

@@ -3,6 +3,7 @@ package com.mindera.rocketscience.presentation.launcheslist
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mindera.rocketscience.domain.common.DataResponse
+import com.mindera.rocketscience.domain.common.UiState
 import com.mindera.rocketscience.domain.launcheslist.Launch
 import com.mindera.rocketscience.domain.launcheslist.LaunchesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -18,8 +19,8 @@ class LaunchesViewModel @Inject constructor(
     private val launchesUseCase: LaunchesUseCase
 ) : ViewModel() {
 
-    private val _state = MutableStateFlow<LaunchesState<List<Launch>>>(LaunchesState.Loading)
-    var state: StateFlow<LaunchesState<List<Launch>>> = _state
+    private val _state = MutableStateFlow<UiState<List<Launch>>>(UiState.Loading)
+    var state: StateFlow<UiState<List<Launch>>> = _state
 
     private val _yearsState = MutableStateFlow<Set<String>>(emptySet())
     var yearsState: StateFlow<Set<String>> = _yearsState
@@ -37,9 +38,9 @@ class LaunchesViewModel @Inject constructor(
         viewModelScope.launch {
             launchesUseCase().collect {
                 when (it) {
-                    is DataResponse.Error -> _state.value = LaunchesState.Error(it.message)
+                    is DataResponse.Error -> _state.value = UiState.Error(it.message)
                     is DataResponse.Success -> {
-                        _state.value = LaunchesState.Success(it.data)
+                        _state.value = UiState.Success(it.data)
                         launchList = it.data.toMutableList()
                     }
                 }
@@ -47,7 +48,7 @@ class LaunchesViewModel @Inject constructor(
         }
     }
 
-    fun fetchLaunchesYears() {
+    fun fetchYears() {
         viewModelScope.launch {
             _yearsState.value = launchList.map { it.launchYear }.toSet()
         }
@@ -77,7 +78,7 @@ class LaunchesViewModel @Inject constructor(
                 SortOrder.NOT_CHECKED -> filteredLaunches
             }
 
-            _state.value = LaunchesState.Success(
+            _state.value = UiState.Success(
                 filteredLaunches.ifEmpty {
                     _notFoundState.emit("No results found for the applied filter. Try again!")
                     launchList
@@ -91,10 +92,4 @@ enum class SortOrder {
     ASC,
     DESC,
     NOT_CHECKED
-}
-
-sealed class LaunchesState<out T : Any> {
-    data class Success<out T : Any>(val data: T) : LaunchesState<T>()
-    data class Error(val message: String) : LaunchesState<Nothing>()
-    object Loading : LaunchesState<Nothing>()
 }

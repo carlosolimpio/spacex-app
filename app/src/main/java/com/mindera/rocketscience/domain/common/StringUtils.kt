@@ -27,3 +27,7 @@ fun String.calculateDaysFromToday(): Long {
 
     return ChronoUnit.DAYS.between(currentDate.toLocalDate(), zonedDateTime.toLocalDate())
 }
+
+fun String.capitalize(): String {
+    return this.lowercase().replaceFirstChar { it.uppercaseChar() }
+}

@@ -14,7 +14,9 @@ import com.mindera.rocketscience.domain.common.convertToTime
 import com.mindera.rocketscience.domain.launcheslist.Launch
 import kotlin.math.absoluteValue
 
-class LaunchesAdapter : RecyclerView.Adapter<LaunchesAdapter.LaunchesViewHolder>() {
+class LaunchesAdapter(
+    private val onMissionClick: (List<String>) -> Unit
+) : RecyclerView.Adapter<LaunchesAdapter.LaunchesViewHolder>() {
 
     private val diffUtil = object : DiffUtil.ItemCallback<Launch>() {
         override fun areItemsTheSame(oldItem: Launch, newItem: Launch): Boolean {
@@ -33,7 +35,7 @@ class LaunchesAdapter : RecyclerView.Adapter<LaunchesAdapter.LaunchesViewHolder>
         val binding = LayoutLaunchItemBinding.inflate(
             LayoutInflater.from(parent.context),
             parent,
-            false,
+            false
         )
         return LaunchesViewHolder(binding)
     }
@@ -46,7 +48,7 @@ class LaunchesAdapter : RecyclerView.Adapter<LaunchesAdapter.LaunchesViewHolder>
     }
 
     inner class LaunchesViewHolder(
-        private val binding: LayoutLaunchItemBinding,
+        private val binding: LayoutLaunchItemBinding
     ) : RecyclerView.ViewHolder(binding.root) {
         private val context = binding.root.context
 
@@ -56,29 +58,22 @@ class LaunchesAdapter : RecyclerView.Adapter<LaunchesAdapter.LaunchesViewHolder>
                 dateTimeValue.text = context.getString(
                     R.string.date_at_time,
                     launch.launchDate.convertToDate(),
-                    launch.launchDate.convertToTime(),
+                    launch.launchDate.convertToTime()
                 )
                 rocketAlias.text = context.getString(
                     R.string.rocket_info,
                     launch.rocketName,
-                    launch.rocketType,
+                    launch.rocketType
                 )
 
-                val days = launch.launchDate.calculateDaysFromToday()
-                daysLaunch.text = if (days > 0) {
-                    context.getString(R.string.days_now, context.getString(R.string.from))
-                } else {
-                    context.getString(R.string.days_now, context.getString(R.string.since))
-                }
-
-                daysLaunchValue.text = days.absoluteValue.toString()
-
+                daysLaunch.text = getDaysToLaunch(launch.launchDate)
+                daysLaunchValue.text = getDayCount(launch.launchDate)
                 launchSuccessIcon.setImageResource(
                     if (launch.wasLaunchSuccessful) {
                         R.drawable.icon_done
                     } else {
                         R.drawable.icon_failed
-                    },
+                    }
                 )
 
                 Glide.with(context)
@@ -89,8 +84,24 @@ class LaunchesAdapter : RecyclerView.Adapter<LaunchesAdapter.LaunchesViewHolder>
                     .into(patchImage)
 
                 launchCard.setOnClickListener {
-
+                    onMissionClick(
+                        listOf(launch.articleLink, launch.videoLink, launch.wikipediaLink)
+                    )
                 }
+            }
+        }
+
+        private fun getDayCount(rawLaunchDate: String): String {
+            val days = rawLaunchDate.calculateDaysFromToday()
+            return days.absoluteValue.toString()
+        }
+
+        private fun getDaysToLaunch(rawLaunchDate: String): String {
+            val days = rawLaunchDate.calculateDaysFromToday()
+            return if (days > 0) {
+                context.getString(R.string.days_now, context.getString(R.string.from))
+            } else {
+                context.getString(R.string.days_now, context.getString(R.string.since))
             }
         }
     }

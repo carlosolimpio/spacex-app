@@ -10,6 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.mindera.rocketscience.R
 import com.mindera.rocketscience.databinding.FragmentCompanyInfoBinding
+import com.mindera.rocketscience.domain.common.UiState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -39,7 +40,7 @@ class CompanyInfoFragment : Fragment() {
         lifecycleScope.launch {
             companyViewModel.state.collect { response ->
                 when (response) {
-                    is CompanyState.Success -> {
+                    is UiState.Success -> {
                         binding.apply {
                             progressBar.visibility = View.GONE
                             companySumaryText.visibility = View.VISIBLE
@@ -54,11 +55,11 @@ class CompanyInfoFragment : Fragment() {
                             )
                         }
                     }
-                    is CompanyState.Error -> {
+                    is UiState.Error -> {
                         Toast.makeText(context, response.message, Toast.LENGTH_LONG).show()
                         binding.progressBar.visibility = View.GONE
                     }
-                    CompanyState.Loading -> {
+                    UiState.Loading -> {
                         binding.apply {
                             progressBar.visibility = View.VISIBLE
                             companySumaryText.visibility = View.GONE
