@@ -1,6 +1,7 @@
 package com.mindera.rocketscience.presentation
 
 import android.os.Bundle
+import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import com.mindera.rocketscience.R
 import com.mindera.rocketscience.presentation.companyinfo.CompanyInfoFragment
@@ -12,6 +13,9 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        supportActionBar?.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
+        supportActionBar?.setCustomView(R.layout.layout_app_bar)
 
         setContentView(R.layout.activity_main)
 
