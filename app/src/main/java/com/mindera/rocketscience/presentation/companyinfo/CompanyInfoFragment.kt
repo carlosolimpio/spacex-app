@@ -24,7 +24,7 @@ class CompanyInfoFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?,
+        savedInstanceState: Bundle?
     ): View {
         binding = FragmentCompanyInfoBinding.inflate(inflater)
         return binding.root
@@ -33,6 +33,7 @@ class CompanyInfoFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        companyViewModel.fetchCompany()
         initObservers()
     }
 
@@ -42,8 +43,7 @@ class CompanyInfoFragment : Fragment() {
                 when (response) {
                     is UiState.Success -> {
                         binding.apply {
-                            progressBar.visibility = View.GONE
-                            companySumaryText.visibility = View.VISIBLE
+                            showProgress(false)
                             companySumaryText.text = getString(
                                 R.string.company_summary,
                                 response.data.name,
@@ -56,16 +56,23 @@ class CompanyInfoFragment : Fragment() {
                         }
                     }
                     is UiState.Error -> {
+                        showProgress(false)
                         Toast.makeText(context, response.message, Toast.LENGTH_LONG).show()
-                        binding.progressBar.visibility = View.GONE
                     }
-                    UiState.Loading -> {
-                        binding.apply {
-                            progressBar.visibility = View.VISIBLE
-                            companySumaryText.visibility = View.GONE
-                        }
-                    }
+                    UiState.Loading -> { showProgress(true) }
                 }
+            }
+        }
+    }
+
+    private fun showProgress(isLoading: Boolean) {
+        binding.apply {
+            if (isLoading) {
+                progressBar.visibility = View.VISIBLE
+                companySumaryText.visibility = View.GONE
+            } else {
+                progressBar.visibility = View.GONE
+                companySumaryText.visibility = View.VISIBLE
             }
         }
     }

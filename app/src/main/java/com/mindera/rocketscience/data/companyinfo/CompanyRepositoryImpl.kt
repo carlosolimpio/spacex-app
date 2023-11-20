@@ -5,15 +5,15 @@ import com.mindera.rocketscience.data.companyinfo.local.CompanyDao
 import com.mindera.rocketscience.data.companyinfo.remote.CompanyService
 import com.mindera.rocketscience.domain.common.DataResponse
 import com.mindera.rocketscience.domain.companyinfo.CompanyRepository
+import java.net.UnknownHostException
+import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
-import java.net.UnknownHostException
-import javax.inject.Inject
 
 class CompanyRepositoryImpl @Inject constructor(
     private val companyService: CompanyService,
-    private val companyDao: CompanyDao,
+    private val companyDao: CompanyDao
 ) : CompanyRepository {
 
     override suspend fun getCompany() = flow {

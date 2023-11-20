@@ -10,19 +10,17 @@ import com.mindera.rocketscience.data.launcheslist.LaunchesRepositoryImpl
 import com.mindera.rocketscience.data.launcheslist.local.LaunchesDao
 import com.mindera.rocketscience.data.launcheslist.remote.LaunchesService
 import com.mindera.rocketscience.domain.companyinfo.CompanyRepository
-import com.mindera.rocketscience.domain.companyinfo.CompanyUseCase
-import com.mindera.rocketscience.domain.launcheslist.LaunchesUseCase
 import com.mindera.rocketscience.domain.launcheslist.LaunchesRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import javax.inject.Singleton
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
 @Module
@@ -66,19 +64,19 @@ object AppModule {
     @Singleton
     @Provides
     fun provideAppRoomDataBase(
-        @ApplicationContext context: Context,
+        @ApplicationContext context: Context
     ): AppRoomDatabase {
         return Room.databaseBuilder(
             context,
             AppRoomDatabase::class.java,
-            "AppRoomDatabase",
+            "AppRoomDatabase"
         ).build()
     }
 
     @Singleton
     @Provides
     fun provideCompanyDao(
-        appDatabase: AppRoomDatabase,
+        appDatabase: AppRoomDatabase
     ): CompanyDao {
         return appDatabase.getCompanyDao()
     }
@@ -107,21 +105,5 @@ object AppModule {
         launchesDao: LaunchesDao
     ): LaunchesRepository {
         return LaunchesRepositoryImpl(launchesService, launchesDao)
-    }
-
-    @Singleton
-    @Provides
-    fun provideCompanyUseCase(
-        repository: CompanyRepository
-    ): CompanyUseCase {
-        return CompanyUseCase(repository)
-    }
-
-    @Singleton
-    @Provides
-    fun provideLaunchUseCase(
-        repository: LaunchesRepository
-    ): LaunchesUseCase {
-        return LaunchesUseCase(repository)
     }
 }

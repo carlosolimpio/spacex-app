@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.mindera.rocketscience.domain.common.DataResponse
 import com.mindera.rocketscience.domain.common.UiState
 import com.mindera.rocketscience.domain.launcheslist.Launch
-import com.mindera.rocketscience.domain.launcheslist.LaunchesUseCase
+import com.mindera.rocketscience.domain.launcheslist.LaunchesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
 
 @HiltViewModel
 class LaunchesViewModel @Inject constructor(
-    private val launchesUseCase: LaunchesUseCase
+    private val repository: LaunchesRepository
 ) : ViewModel() {
 
     private val _state = MutableStateFlow<UiState<List<Launch>>>(UiState.Loading)
@@ -30,13 +30,9 @@ class LaunchesViewModel @Inject constructor(
 
     private var launchList = mutableListOf<Launch>()
 
-    init {
-        fetchLaunches()
-    }
-
     fun fetchLaunches() {
         viewModelScope.launch {
-            launchesUseCase().collect {
+            repository.getLaunchesList().collect {
                 when (it) {
                     is DataResponse.Error -> _state.value = UiState.Error(it.message)
                     is DataResponse.Success -> {
@@ -56,7 +52,7 @@ class LaunchesViewModel @Inject constructor(
 
     fun applyFilters(
         years: List<String>,
-        onlySuccessful: Boolean,
+        onlySuccessful: Boolean = false,
         sortOrder: SortOrder = SortOrder.NOT_CHECKED
     ) {
         viewModelScope.launch {
