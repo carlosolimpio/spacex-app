@@ -85,6 +85,19 @@ open class BaseUnitTest {
                 "articlelink3",
                 "wikilink3",
                 "videolink3"
+            ),
+            Launch(
+                "mission4",
+                "25/12/2023",
+                "2023",
+                true,
+                "santa4",
+                "sled4",
+                "missionpatch4",
+                "missionpatchsmall4",
+                "articlelink4",
+                "wikilink4",
+                "videolink4"
             )
         )
     )

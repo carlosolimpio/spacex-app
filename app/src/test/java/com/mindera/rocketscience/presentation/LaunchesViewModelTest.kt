@@ -5,6 +5,7 @@ import com.mindera.rocketscience.BaseUnitTest
 import com.mindera.rocketscience.domain.common.UiState
 import com.mindera.rocketscience.domain.launcheslist.LaunchesRepository
 import com.mindera.rocketscience.presentation.launcheslist.LaunchesViewModel
+import com.mindera.rocketscience.presentation.launcheslist.SortOrder
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.advanceUntilIdle
@@ -93,5 +94,56 @@ class LaunchesViewModelTest : BaseUnitTest() {
         }
     }
 
-    //mais 2 filtros
+    @Test
+    fun `test when applying a filter by year and only successful launches to the launches list should show success state with the applied filter`() = runTest {
+        Mockito.`when`(repository.getLaunchesList()).thenReturn(flowOf(launchesResponse))
+        viewModel.fetchLaunches()
+        advanceUntilIdle()
+        viewModel.fetchYears()
+        advanceUntilIdle()
+        viewModel.applyFilters(
+            years = listOf("2023"),
+            onlySuccessful = true
+        )
+
+        viewModel.state.test {
+            awaitItem() // Success state for fetchLaunches call
+            val filteredItem = awaitItem()
+            assertTrue(filteredItem is UiState.Success)
+            assertEquals(2, (filteredItem as UiState.Success).data.size)
+            assertEquals("2023", filteredItem.data[0].launchYear)
+            assertTrue(filteredItem.data[0].wasLaunchSuccessful)
+            assertEquals("2023", filteredItem.data[1].launchYear)
+            assertTrue(filteredItem.data[1].wasLaunchSuccessful)
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `test when applying a filter by year, only successful launches and sorted in descending order to the launches list should show success state with the applied filter`() = runTest {
+        Mockito.`when`(repository.getLaunchesList()).thenReturn(flowOf(launchesResponse))
+        viewModel.fetchLaunches()
+        advanceUntilIdle()
+        viewModel.fetchYears()
+        advanceUntilIdle()
+        viewModel.applyFilters(
+            years = listOf("2023"),
+            onlySuccessful = true,
+            SortOrder.DESC
+        )
+
+        viewModel.state.test {
+            awaitItem() // Success state for fetchLaunches call
+            val filteredItem = awaitItem()
+            assertTrue(filteredItem is UiState.Success)
+            assertEquals(2, (filteredItem as UiState.Success).data.size)
+            assertEquals("2023", filteredItem.data[0].launchYear)
+            assertTrue(filteredItem.data[0].wasLaunchSuccessful)
+            assertEquals("mission4", filteredItem.data[0].missionName)
+            assertEquals("2023", filteredItem.data[1].launchYear)
+            assertTrue(filteredItem.data[1].wasLaunchSuccessful)
+            assertEquals("mission1", filteredItem.data[1].missionName)
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
 }

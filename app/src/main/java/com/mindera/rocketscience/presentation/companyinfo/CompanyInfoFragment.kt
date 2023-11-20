@@ -56,7 +56,7 @@ class CompanyInfoFragment : Fragment() {
                         }
                     }
                     is UiState.Error -> {
-                        showProgress(false)
+                        binding.progressBar.visibility = View.GONE
                         Toast.makeText(context, response.message, Toast.LENGTH_LONG).show()
                     }
                     UiState.Loading -> { showProgress(true) }
